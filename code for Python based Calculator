@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import ttk
+
+
+
+# Function to handle button clicks
+def click_button(value):
+    current = str(entry.get())
+    entry.delete(0, tk.END)
+    entry.insert(0, current + value)
+
+# Function to clear the entry field
+def clear_entry():
+    entry.delete(0, tk.END)
+
+# Function to evaluate and display result
+def calculate():
+    try:
+        result = eval(entry.get())
+        entry.delete(0, tk.END)
+        entry.insert(0, str(result))
+    except Exception as e:
+        entry.delete(0, tk.END)
+        entry.insert(0, "Error")
+
+# Create the main window
+root = tk.Tk()
+root.title("Calculator")
+root.geometry("300x400")
+root.resizable(False, False)
+
+# Entry field style
+style = ttk.Style()
+style.configure("TEntry", font=('Arial', 20))
+
+# Create an entry field
+entry = ttk.Entry(root, font=('Arial', 24), justify='right')
+entry.grid(row=0, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
+entry.grid_rowconfigure(0, weight=1)
+entry.grid_columnconfigure(0, weight=1)
+
+# Define buttons with text and row/column configuration
+buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '=', '+'
+]
+
+# Add buttons to the grid with styling
+row_val = 1
+col_val = 0
+
+for button in buttons:
+    ttk.Button(root, text=button, style='my.TButton', command=lambda button=button: click_button(button)).grid(row=row_val, column=col_val, sticky="nsew", padx=5, pady=5)
+    col_val += 1
+    if col_val > 3:
+        col_val = 0
+        row_val += 1
+
+# Create special buttons (Clear and Equals)
+ttk.Button(root, text='C', style='my.TButton', command=clear_entry).grid(row=5, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+ttk.Button(root, text='=', style='my.TButton', command=calculate).grid(row=5, column=2, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+# Configure grid layout
+for i in range(6):
+    root.grid_rowconfigure(i, weight=1)
+    root.grid_columnconfigure(i, weight=1)
+
+# Button style
+style.configure("my.TButton", font=('Arial', 16))
+
+# Start the main event loop
+root.mainloop()
